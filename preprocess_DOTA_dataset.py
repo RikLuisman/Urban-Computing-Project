@@ -3,11 +3,14 @@ import numpy as np
 import cv2
 import rasterio
 from rasterio.transform import from_origin
+import random
 
 INPUT_IMAGE_DIR = "DOTA Dataset/images"
 INPUT_LABEL_DIR = "DOTA Dataset/labels"
-OUTPUT_IMAGE_DIR = "Preprocessed Datasets/DOTA/images"
-OUTPUT_MASK_DIR = "Preprocessed Datasets/DOTA/masks"
+OUTPUT_TRAIN_IMAGE_DIR = "Preprocessed Datasets/DOTA/train/images"
+OUTPUT_TRAIN_MASK_DIR = "Preprocessed Datasets/DOTA/train/masks"
+OUTPUT_TEST_IMAGE_DIR = "Preprocessed Datasets/DOTA/test/images"
+OUTPUT_TEST_MASK_DIR = "Preprocessed Datasets/DOTA/test/masks"
 
 CATEGORY_MAPPING = {
     "storage-tank": "building",
@@ -61,6 +64,12 @@ def create_mask(image_shape, bounding_boxes, class_mapping):
         cv2.fillPoly(mask, [points], class_value)  # Fill polygon with class value
     return mask
 
+def prepare_output_dirs():
+    """Ensure output directories exist."""
+    os.makedirs(OUTPUT_TRAIN_IMAGE_DIR, exist_ok=True)
+    os.makedirs(OUTPUT_TRAIN_MASK_DIR, exist_ok=True)
+    os.makedirs(OUTPUT_TEST_IMAGE_DIR, exist_ok=True)
+    os.makedirs(OUTPUT_TEST_MASK_DIR, exist_ok=True)
 
 if __name__ == "__main__":
     # image_names = os.listdir(INPUT_IMAGE_DIR)
@@ -68,60 +77,72 @@ if __name__ == "__main__":
     # image = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
     # cropped_image = image[:224, :224]
     # print(cropped_image.shape)
+    prepare_output_dirs()
 
-    for image_name in os.listdir(INPUT_IMAGE_DIR):
-        if not image_name.endswith(".png"):
-            continue
+    image_names = [name for name in os.listdir(INPUT_IMAGE_DIR) if name.endswith(".png")]
+    random.shuffle(image_names)
 
-        image_path = os.path.join(INPUT_IMAGE_DIR, image_name)
-        label_name = image_name.replace(".png", ".txt")
-        label_path = os.path.join(INPUT_LABEL_DIR, label_name)
+    split_index = int(len(image_names) * 0.85)
+    train_images = image_names[:split_index]
+    test_images = image_names[split_index:]
 
-        # Load image
-        image = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
-        if len(image.shape) != 3 or image.shape[2] != 3:
-            print(f"Skipping {image_name}: not an RGB image (shape: {image.shape})")
-            continue
+    for split, images in [("train", train_images), ("test", test_images)]:
+        output_image_dir = OUTPUT_TRAIN_IMAGE_DIR if split == "train" else OUTPUT_TEST_IMAGE_DIR
+        output_mask_dir = OUTPUT_TRAIN_MASK_DIR if split == "train" else OUTPUT_TEST_MASK_DIR
 
-        cropped_image = image[:224, :224, :]
-        cropped_image = np.transpose(cropped_image, (2, 0, 1)) # rasterio wants the number of bands to be the first
-        print(f"I am transforming image {image_name} into tiff format.")
+        for image_name in images:
+            if not image_name.endswith(".png"):
+                continue
 
-        # Save image as TIF
-        output_image_path = os.path.join(OUTPUT_IMAGE_DIR, image_name.replace(".png", ".tif"))
-        transform = from_origin(0, 0, 1, 1)
-        with rasterio.open(
-                output_image_path,
-                'w',
-                driver='GTiff',
-                height=224,
-                width=224,
-                count=cropped_image.shape[0],
-                dtype=cropped_image.dtype,
-                transform=transform,
-                crs="EPSG:4326"
-        ) as dst:
-            dst.write(cropped_image)
+            image_path = os.path.join(INPUT_IMAGE_DIR, image_name)
+            label_name = image_name.replace(".png", ".txt")
+            label_path = os.path.join(INPUT_LABEL_DIR, label_name)
 
-        # Process corresponding label
-        if os.path.exists(label_path):
-            bounding_boxes = parse_label_file_with_mapping(label_path, CATEGORY_MAPPING)
-            mask = create_mask(image.shape, bounding_boxes, CLASS_MAPPING)
+            # Load image
+            image = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
+            if len(image.shape) != 3 or image.shape[2] != 3:
+                print(f"Skipping {image_name}: not an RGB image (shape: {image.shape})")
+                continue
 
-            cropped_mask = mask[:224, :224]
-            # Save mask as TIF
-            output_mask_path = os.path.join(OUTPUT_MASK_DIR, label_name.replace(".txt", ".tif"))
+            cropped_image = image[:224, :224, :]
+            cropped_image = np.transpose(cropped_image, (2, 0, 1)) # rasterio wants the number of bands to be the first
+            print(f"I am transforming image {image_name} into tiff format.")
+
+            # Save image as TIF
+            output_image_path = os.path.join(output_image_dir, image_name.replace(".png", ".tif"))
+            transform = from_origin(0, 0, 1, 1)
             with rasterio.open(
-                    output_mask_path,
+                    output_image_path,
                     'w',
                     driver='GTiff',
                     height=224,
                     width=224,
-                    count=1,
-                    dtype=cropped_mask.dtype,
+                    count=cropped_image.shape[0],
+                    dtype=cropped_image.dtype,
                     transform=transform,
                     crs="EPSG:4326"
             ) as dst:
-                dst.write(cropped_mask, 1)
-        else:
-            print(f"No label found for {image_path}, skipping mask creation.")
+                dst.write(cropped_image)
+
+            # Process corresponding label
+            if os.path.exists(label_path):
+                bounding_boxes = parse_label_file_with_mapping(label_path, CATEGORY_MAPPING)
+                mask = create_mask(image.shape, bounding_boxes, CLASS_MAPPING)
+
+                cropped_mask = mask[:224, :224]
+                # Save mask as TIF
+                output_mask_path = os.path.join(output_mask_dir, label_name.replace(".txt", ".tif"))
+                with rasterio.open(
+                        output_mask_path,
+                        'w',
+                        driver='GTiff',
+                        height=224,
+                        width=224,
+                        count=1,
+                        dtype=cropped_mask.dtype,
+                        transform=transform,
+                        crs="EPSG:4326"
+                ) as dst:
+                    dst.write(cropped_mask, 1)
+            else:
+                print(f"No label found for {image_path}, skipping mask creation.")
