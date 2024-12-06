@@ -10,6 +10,7 @@ from Prithvi import MaskedAutoencoderViT
 import torch
 import yaml
 from tqdm import tqdm
+from collections import Counter
 
 class TIFFDataset(Dataset):
     def __init__(self, image_dir, mask_dir, transform=None):
@@ -50,6 +51,26 @@ def create_segmentation_head(embed_dim, num_classes):
         nn.Conv2d(embed_dims[-1], num_classes, kernel_size=1)
     )
     return segmentation_head
+
+def calculate_class_weights(train_loader, num_classes):
+    class_counts = np.zeros(num_classes, dtype=np.float32)
+
+    for _, masks in train_loader:
+        masks = masks.numpy().flatten()  # Flatten to count pixels
+        counts = Counter(masks)
+        for class_idx, count in counts.items():
+            class_counts[class_idx] += count
+
+    print("Class Distribution:")
+    for class_idx, count in enumerate(class_counts):
+        print(f"Class {class_idx}: {count:.0f} pixels")
+
+    # Compute inverse class frequencies
+    total_pixels = class_counts.sum()
+    class_weights = total_pixels / (num_classes * class_counts)  # Normalize weights
+
+    return torch.tensor(class_weights, dtype=torch.float32), class_counts
+
 
 if __name__ == '__main__':
 
@@ -92,12 +113,16 @@ if __name__ == '__main__':
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
     model = FullModel(encoder, segmentation_head).to(device)
-    criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=1e-4)
 
     ################ Training ############################
     train_dataset = TIFFDataset(image_dir="Preprocessed Datasets/DOTA/train/images", mask_dir="Preprocessed Datasets/DOTA/train/masks")
     train_loader = DataLoader(train_dataset, batch_size=8, shuffle=True)
+
+    class_weights, class_counts = calculate_class_weights(train_loader, num_classes)
+    print(f"Class Weights: {class_weights}")
+
+    criterion = nn.CrossEntropyLoss(weight=class_weights)
+    optimizer = optim.Adam(model.parameters(), lr=1e-4)
 
     epochs = 5
     best_loss = float('inf')
