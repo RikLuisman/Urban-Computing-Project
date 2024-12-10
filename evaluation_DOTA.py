@@ -69,7 +69,7 @@ if __name__ == '__main__':
     segmentation_head = create_segmentation_head(embed_dim=model_args["embed_dim"], num_classes=num_classes)
 
     model = FullModel(encoder, segmentation_head)
-    model.load_state_dict(torch.load("FineTuned_models_DOTA/final_segmentation_model.pth", map_location="cpu"))
+    model.load_state_dict(torch.load("FineTuned_models_DOTA/best_segmentation_model_WithDistribFix_20epochs.pth", map_location="cpu"))
     model.eval()
     model.to("cpu")
 
@@ -108,8 +108,9 @@ if __name__ == '__main__':
     for c in range(num_classes):
         print(f"Class {c} IoU: {class_ious_avg[c]:.4f}")
 
+    print()
     overall_miou = np.nanmean(all_mean_ious)
     print(f"Mean IoU (mIoU) for all classes: {overall_miou:.4f}")
 
-    overall_accuracy = np.mean(all_acc)
-    print(f"Pixel Accuracy: {overall_accuracy:.4f}")
+    # overall_accuracy = np.mean(all_acc)
+    # print(f"Pixel Accuracy: {overall_accuracy:.4f}")
