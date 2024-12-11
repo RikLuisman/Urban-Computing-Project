@@ -115,9 +115,10 @@ if __name__ == "__main__":
     # image_names = [name for name in os.listdir(INPUT_IMAGE_DIR) if name.endswith(".png")]
     # print(f"There are {len(image_names)} images in total")
 
+    random.seed(42)
     random.shuffle(image_names)
 
-    split_index = int(len(image_names) * 0.85)
+    split_index = int(len(image_names) * 0.9)
     train_images = image_names[:split_index]
     test_images = image_names[split_index:]
 
