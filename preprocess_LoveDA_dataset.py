@@ -10,12 +10,14 @@ from PIL import Image
 import io
 import zlib
 
-TAG = "urban"
+TAG = "rural"
 
 INPUT_IMAGE_DIR = "LoveDa Dataset/img"
 INPUT_LABEL_DIR = "LoveDa Dataset/ann"
 OUTPUT_TRAIN_IMAGE_DIR = f"Preprocessed Datasets/LoveDa/{TAG}/train/images"
 OUTPUT_TRAIN_MASK_DIR = f"Preprocessed Datasets/LoveDa/{TAG}/train/masks"
+OUTPUT_VAL_IMAGE_DIR = f"Preprocessed Datasets/LoveDa/{TAG}/val/images"
+OUTPUT_VAL_MASK_DIR = f"Preprocessed Datasets/LoveDa/{TAG}/val/masks"
 OUTPUT_TEST_IMAGE_DIR = f"Preprocessed Datasets/LoveDa/{TAG}/test/images"
 OUTPUT_TEST_MASK_DIR = f"Preprocessed Datasets/LoveDa/{TAG}/test/masks"
 
@@ -100,6 +102,8 @@ def prepare_output_dirs():
     """Ensure output directories exist."""
     os.makedirs(OUTPUT_TRAIN_IMAGE_DIR, exist_ok=True)
     os.makedirs(OUTPUT_TRAIN_MASK_DIR, exist_ok=True)
+    os.makedirs(OUTPUT_VAL_IMAGE_DIR, exist_ok=True)
+    os.makedirs(OUTPUT_VAL_MASK_DIR, exist_ok=True)
     os.makedirs(OUTPUT_TEST_IMAGE_DIR, exist_ok=True)
     os.makedirs(OUTPUT_TEST_MASK_DIR, exist_ok=True)
 
@@ -118,13 +122,30 @@ if __name__ == "__main__":
     random.seed(42)
     random.shuffle(image_names)
 
-    split_index = int(len(image_names) * 0.9)
-    train_images = image_names[:split_index]
-    test_images = image_names[split_index:]
+    train_ratio = 0.8
+    val_ratio = 0.1
 
-    for split, images in [("train", train_images), ("test", test_images)]:
-        output_image_dir = OUTPUT_TRAIN_IMAGE_DIR if split == "train" else OUTPUT_TEST_IMAGE_DIR
-        output_mask_dir = OUTPUT_TRAIN_MASK_DIR if split == "train" else OUTPUT_TEST_MASK_DIR
+    train_split_index = int(len(image_names) * train_ratio)
+    val_split_index = int(len(image_names) * (train_ratio + val_ratio))
+
+    train_images = image_names[:train_split_index]
+    val_images = image_names[train_split_index:val_split_index]
+    test_images = image_names[val_split_index:]
+
+    print(f"There are {len(train_images)} train images for the {TAG} class")
+    print(f"There are {len(val_images)} validation images for the {TAG} class")
+    print(f"There are {len(test_images)} test images for the {TAG} class")
+
+    for split, images in [("train", train_images), ("val", val_images), ("test", test_images)]:
+        if split == "train":
+            output_image_dir = OUTPUT_TRAIN_IMAGE_DIR
+            output_mask_dir = OUTPUT_TRAIN_MASK_DIR
+        elif split == "val":
+            output_image_dir = OUTPUT_VAL_IMAGE_DIR
+            output_mask_dir = OUTPUT_VAL_MASK_DIR
+        else:
+            output_image_dir = OUTPUT_TEST_IMAGE_DIR
+            output_mask_dir = OUTPUT_TEST_MASK_DIR
 
         for image_name in images:
             if not image_name.endswith(".png"):

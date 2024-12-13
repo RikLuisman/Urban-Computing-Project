@@ -7,13 +7,15 @@ from finetuning_helper import create_full_model, create_segmentation_head, TIFFD
 from evaluation_helper import compute_miou, compute_acc
 
 if __name__ == '__main__':
+
     ############### Parameters Setting ####################
-    TEST_IMAGES_PATH = f"Preprocessed Datasets/DOTA/test/images"
-    TEST_MASKS_PATH = f"Preprocessed Datasets/DOTA/test/masks"
-    NUM_CLASSES = 8
+    TAG = "rural"
+    TEST_IMAGES_PATH = f"Preprocessed Datasets/LoveDa/{TAG}/test/images"
+    TEST_MASKS_PATH = f"Preprocessed Datasets/LoveDa/{TAG}/test/masks"
+    NUM_CLASSES = 7
     EPOCHS = 5
-    LEARNING_RATE = 0.0001
-    SAVED_MODEL_PATH = f"FineTuned_models_DOTA/final_segmentation_model_{EPOCHS}epochs_{LEARNING_RATE}.pth"
+    LEARNING_RATE = 0.001
+    SAVED_MODEL_PATH = f"FineTuned_models_LoveDa/{TAG}/final_segmentation_model_{EPOCHS}epochs_{LEARNING_RATE}.pth"
 
     ################ Load Weights and Saved Model #########################
     weights_path = "Prithvi_100M.pt"
@@ -33,6 +35,7 @@ if __name__ == '__main__':
     model.load_state_dict(torch.load(SAVED_MODEL_PATH, map_location="cpu"))
     model.eval()
     model.to("cpu")
+
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")

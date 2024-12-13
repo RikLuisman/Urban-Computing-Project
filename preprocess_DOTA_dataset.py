@@ -9,6 +9,8 @@ INPUT_IMAGE_DIR = "DOTA Dataset/images"
 INPUT_LABEL_DIR = "DOTA Dataset/labels"
 OUTPUT_TRAIN_IMAGE_DIR = "Preprocessed Datasets/DOTA/train/images"
 OUTPUT_TRAIN_MASK_DIR = "Preprocessed Datasets/DOTA/train/masks"
+OUTPUT_VAL_IMAGE_DIR = "Preprocessed Datasets/DOTA/val/images"
+OUTPUT_VAL_MASK_DIR = "Preprocessed Datasets/DOTA/val/masks"
 OUTPUT_TEST_IMAGE_DIR = "Preprocessed Datasets/DOTA/test/images"
 OUTPUT_TEST_MASK_DIR = "Preprocessed Datasets/DOTA/test/masks"
 
@@ -68,27 +70,44 @@ def prepare_output_dirs():
     """Ensure output directories exist."""
     os.makedirs(OUTPUT_TRAIN_IMAGE_DIR, exist_ok=True)
     os.makedirs(OUTPUT_TRAIN_MASK_DIR, exist_ok=True)
+    os.makedirs(OUTPUT_VAL_IMAGE_DIR, exist_ok=True)
+    os.makedirs(OUTPUT_VAL_MASK_DIR, exist_ok=True)
     os.makedirs(OUTPUT_TEST_IMAGE_DIR, exist_ok=True)
     os.makedirs(OUTPUT_TEST_MASK_DIR, exist_ok=True)
 
 if __name__ == "__main__":
-    # image_names = os.listdir(INPUT_IMAGE_DIR)
-    # image_path = os.path.join(INPUT_IMAGE_DIR, image_names[1200])
-    # image = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
-    # cropped_image = image[:224, :224]
-    # print(cropped_image.shape)
     prepare_output_dirs()
 
     image_names = [name for name in os.listdir(INPUT_IMAGE_DIR) if name.endswith(".png")]
+
+    random.seed(42)
     random.shuffle(image_names)
 
-    split_index = int(len(image_names) * 0.85)
-    train_images = image_names[:split_index]
-    test_images = image_names[split_index:]
+    train_ratio = 0.8
+    val_ratio = 0.1
 
-    for split, images in [("train", train_images), ("test", test_images)]:
-        output_image_dir = OUTPUT_TRAIN_IMAGE_DIR if split == "train" else OUTPUT_TEST_IMAGE_DIR
-        output_mask_dir = OUTPUT_TRAIN_MASK_DIR if split == "train" else OUTPUT_TEST_MASK_DIR
+    train_split_index = int(len(image_names) * train_ratio)
+    val_split_index = int(len(image_names) * (train_ratio + val_ratio))
+
+    train_images = image_names[:train_split_index]
+    val_images = image_names[train_split_index:val_split_index]
+    test_images = image_names[val_split_index:]
+
+    print(f"There are {len(train_images)} train images.")
+    print(f"There are {len(val_images)} validation images.")
+    print(f"There are {len(test_images)} test images.")
+
+
+    for split, images in [("train", train_images), ("val", val_images), ("test", test_images)]:
+        if split == "train":
+            output_image_dir = OUTPUT_TRAIN_IMAGE_DIR
+            output_mask_dir = OUTPUT_TRAIN_MASK_DIR
+        elif split == "val":
+            output_image_dir = OUTPUT_VAL_IMAGE_DIR
+            output_mask_dir = OUTPUT_VAL_MASK_DIR
+        else:
+            output_image_dir = OUTPUT_TEST_IMAGE_DIR
+            output_mask_dir = OUTPUT_TEST_MASK_DIR
 
         for image_name in images:
             if not image_name.endswith(".png"):
