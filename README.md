@@ -2,7 +2,7 @@
 ### Leiden University ~ Urban Computing ~ Final Project 
 *by Anca Matei (s4004507) and Rik Luisman (s2484956)*
 
-This project contains a pipeline for finetuning Prithvi, using two different datasets: one with satellite imagery (DOTA) and one with aerial imagery (LoveDA). 
+This project contains a pipeline for fine-tuning Prithvi, using two different datasets: one with satellite imagery (DOTA) and one with aerial imagery (LoveDA). 
 The repository also contains the scripts necessary to finetune the UNetFormer model, used as a benchmark for our study. 
 
 ### Requirements
