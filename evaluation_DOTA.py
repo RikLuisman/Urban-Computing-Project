@@ -11,7 +11,7 @@ if __name__ == '__main__':
     TEST_IMAGES_PATH = f"Preprocessed Datasets/DOTA/test/images"
     TEST_MASKS_PATH = f"Preprocessed Datasets/DOTA/test/masks"
     NUM_CLASSES = 8
-    EPOCHS = 5
+    EPOCHS = 20
     LEARNING_RATE = 0.0001
     SAVED_MODEL_PATH = f"FineTuned_models_DOTA/final_segmentation_model_{EPOCHS}epochs_{LEARNING_RATE}.pth"
 

@@ -21,7 +21,7 @@ if __name__ == '__main__':
     VAL_IMAGES_PATH = f"Preprocessed Datasets/DOTA/val/images"
     VAL_MASKS_PATH = f"Preprocessed Datasets/DOTA/val/masks"
     CLASS_DISTRIB_FIX = True
-    EPOCHS = 5
+    EPOCHS = 20
     NUM_CLASSES = 8
     LEARNING_RATE = 1e-4
 

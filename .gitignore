@@ -1,7 +1,6 @@
 DOTA Dataset/*
-Prithvi_100M.pt
-SODA-A Dataset/*
+LoveDa Dataset/*
 Preprocessed Datasets/*
 FineTuned_models_DOTA/*
 FineTuned_models_LoveDa/*
-LoveDa Dataset/*
+Prithvi_100M.pt

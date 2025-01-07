@@ -21,9 +21,9 @@ if __name__ == '__main__':
     VAL_IMAGES_PATH = f"Preprocessed Datasets/LoveDa/{TAG}/val/images"
     VAL_MASKS_PATH = f"Preprocessed Datasets/LoveDa/{TAG}/val/masks"
     CLASS_DISTRIB_FIX = False
-    EPOCHS = 5
+    EPOCHS = 20
     NUM_CLASSES = 7
-    LEARNING_RATE = 1e-3
+    LEARNING_RATE = 1e-4
 
     ################ Import Model #########################
     weights_path = "Prithvi_100M.pt"

@@ -9,12 +9,12 @@ from evaluation_helper import compute_miou, compute_acc
 if __name__ == '__main__':
 
     ############### Parameters Setting ####################
-    TAG = "rural"
+    TAG = "urban"
     TEST_IMAGES_PATH = f"Preprocessed Datasets/LoveDa/{TAG}/test/images"
     TEST_MASKS_PATH = f"Preprocessed Datasets/LoveDa/{TAG}/test/masks"
     NUM_CLASSES = 7
-    EPOCHS = 5
-    LEARNING_RATE = 0.001
+    EPOCHS = 20
+    LEARNING_RATE = 0.0001
     SAVED_MODEL_PATH = f"FineTuned_models_LoveDa/{TAG}/final_segmentation_model_{EPOCHS}epochs_{LEARNING_RATE}.pth"
 
     ################ Load Weights and Saved Model #########################
