@@ -116,9 +116,9 @@ if __name__ == '__main__':
         if avg_val_loss < best_val_loss:
             best_val_loss = avg_val_loss
             torch.save(model.state_dict(),
-                       f"FineTuned_models_LoveDa/{TAG}/best_segmentation_model_{EPOCHS}epochs_{LEARNING_RATE}.pth")
+                       f"FineTuned_Prithvi_models_LoveDa/{TAG}/best_segmentation_model_{EPOCHS}epochs_{LEARNING_RATE}.pth")
             print(f"Best model saved at epoch {epoch + 1} with validation loss {avg_val_loss:.4f}")
 
-    torch.save(model.state_dict(), f"FineTuned_models_LoveDa/{TAG}/final_segmentation_model_{EPOCHS}epochs_{LEARNING_RATE}.pth")
+    torch.save(model.state_dict(), f"FineTuned_Prithvi_models_LoveDa/{TAG}/final_segmentation_model_{EPOCHS}epochs_{LEARNING_RATE}.pth")
     print("Final model saved.")
 

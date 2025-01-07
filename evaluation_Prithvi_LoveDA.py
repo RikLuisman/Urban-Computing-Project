@@ -4,7 +4,7 @@ from torch.utils.data import DataLoader
 import yaml
 from Prithvi import MaskedAutoencoderViT
 from finetuning_Prithvi_helper import create_full_model, create_segmentation_head, TIFFDataset
-from evaluation_Prithvi_helper import compute_miou, compute_acc
+from evaluation_helper import compute_miou, compute_acc
 
 if __name__ == '__main__':
 
@@ -15,7 +15,7 @@ if __name__ == '__main__':
     NUM_CLASSES = 7
     EPOCHS = 20
     LEARNING_RATE = 0.0001
-    SAVED_MODEL_PATH = f"FineTuned_models_LoveDa/{TAG}/final_segmentation_model_{EPOCHS}epochs_{LEARNING_RATE}.pth"
+    SAVED_MODEL_PATH = f"FineTuned_Prithvi_models_LoveDa/{TAG}/final_segmentation_model_{EPOCHS}epochs_{LEARNING_RATE}.pth"
 
     ################ Load Weights and Saved Model #########################
     weights_path = "Prithvi_100M.pt"

@@ -1,6 +1,8 @@
 DOTA Dataset/*
 LoveDa Dataset/*
 Preprocessed Datasets Prithvi/*
-FineTuned_models_DOTA/*
-FineTuned_models_LoveDa/*
+Preprocessed Datasets UNetFormer/*
+FineTuned_Prithvi_models_DOTA/*
+FineTuned_Prithvi_models_LoveDa/*
+FineTuned_UNetFormer_models_DOTA/*
 Prithvi_100M.pt
