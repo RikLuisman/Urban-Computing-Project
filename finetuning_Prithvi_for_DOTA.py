@@ -11,15 +11,15 @@ import torch
 import yaml
 from tqdm import tqdm
 from collections import Counter
-from finetuning_helper import TIFFDataset, create_full_model, create_segmentation_head, calculate_class_weights
+from finetuning_Prithvi_helper import TIFFDataset, create_full_model, create_segmentation_head, calculate_class_weights
 
 
 if __name__ == '__main__':
     ############### Parameters Setting ####################
-    TRAIN_IMAGES_PATH = f"Preprocessed Datasets/DOTA/train/images"
-    TRAIN_MASKS_PATH = f"Preprocessed Datasets/DOTA/train/masks"
-    VAL_IMAGES_PATH = f"Preprocessed Datasets/DOTA/val/images"
-    VAL_MASKS_PATH = f"Preprocessed Datasets/DOTA/val/masks"
+    TRAIN_IMAGES_PATH = f"Preprocessed Datasets Prithvi/DOTA/train/images"
+    TRAIN_MASKS_PATH = f"Preprocessed Datasets Prithvi/DOTA/train/masks"
+    VAL_IMAGES_PATH = f"Preprocessed Datasets Prithvi/DOTA/val/images"
+    VAL_MASKS_PATH = f"Preprocessed Datasets Prithvi/DOTA/val/masks"
     CLASS_DISTRIB_FIX = True
     EPOCHS = 20
     NUM_CLASSES = 8
@@ -49,7 +49,7 @@ if __name__ == '__main__':
     model = create_full_model(encoder, segmentation_head, model_args["embed_dim"]).to(device)
 
     ################ Training ############################
-    train_dataset = TIFFDataset(image_dir="Preprocessed Datasets/DOTA/train/images", mask_dir="Preprocessed Datasets/DOTA/train/masks")
+    train_dataset = TIFFDataset(image_dir="Preprocessed Datasets Prithvi/DOTA/train/images", mask_dir="Preprocessed Datasets Prithvi/DOTA/train/masks")
     train_loader = DataLoader(train_dataset, batch_size=8, shuffle=True)
 
     val_dataset = TIFFDataset(image_dir=VAL_IMAGES_PATH, mask_dir=VAL_MASKS_PATH)

@@ -7,12 +7,12 @@ import random
 
 INPUT_IMAGE_DIR = "DOTA Dataset/images"
 INPUT_LABEL_DIR = "DOTA Dataset/labels"
-OUTPUT_TRAIN_IMAGE_DIR = "Preprocessed Datasets/DOTA/train/images"
-OUTPUT_TRAIN_MASK_DIR = "Preprocessed Datasets/DOTA/train/masks"
-OUTPUT_VAL_IMAGE_DIR = "Preprocessed Datasets/DOTA/val/images"
-OUTPUT_VAL_MASK_DIR = "Preprocessed Datasets/DOTA/val/masks"
-OUTPUT_TEST_IMAGE_DIR = "Preprocessed Datasets/DOTA/test/images"
-OUTPUT_TEST_MASK_DIR = "Preprocessed Datasets/DOTA/test/masks"
+OUTPUT_TRAIN_IMAGE_DIR = "Preprocessed Datasets Prithvi/DOTA/train/images"
+OUTPUT_TRAIN_MASK_DIR = "Preprocessed Datasets Prithvi/DOTA/train/masks"
+OUTPUT_VAL_IMAGE_DIR = "Preprocessed Datasets Prithvi/DOTA/val/images"
+OUTPUT_VAL_MASK_DIR = "Preprocessed Datasets Prithvi/DOTA/val/masks"
+OUTPUT_TEST_IMAGE_DIR = "Preprocessed Datasets Prithvi/DOTA/test/images"
+OUTPUT_TEST_MASK_DIR = "Preprocessed Datasets Prithvi/DOTA/test/masks"
 
 CATEGORY_MAPPING = {
     "storage-tank": "building",

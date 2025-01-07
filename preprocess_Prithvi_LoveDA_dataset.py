@@ -14,12 +14,12 @@ TAG = "rural"
 
 INPUT_IMAGE_DIR = "LoveDa Dataset/img"
 INPUT_LABEL_DIR = "LoveDa Dataset/ann"
-OUTPUT_TRAIN_IMAGE_DIR = f"Preprocessed Datasets/LoveDa/{TAG}/train/images"
-OUTPUT_TRAIN_MASK_DIR = f"Preprocessed Datasets/LoveDa/{TAG}/train/masks"
-OUTPUT_VAL_IMAGE_DIR = f"Preprocessed Datasets/LoveDa/{TAG}/val/images"
-OUTPUT_VAL_MASK_DIR = f"Preprocessed Datasets/LoveDa/{TAG}/val/masks"
-OUTPUT_TEST_IMAGE_DIR = f"Preprocessed Datasets/LoveDa/{TAG}/test/images"
-OUTPUT_TEST_MASK_DIR = f"Preprocessed Datasets/LoveDa/{TAG}/test/masks"
+OUTPUT_TRAIN_IMAGE_DIR = f"Preprocessed Datasets Prithvi/LoveDa/{TAG}/train/images"
+OUTPUT_TRAIN_MASK_DIR = f"Preprocessed Datasets Prithvi/LoveDa/{TAG}/train/masks"
+OUTPUT_VAL_IMAGE_DIR = f"Preprocessed Datasets Prithvi/LoveDa/{TAG}/val/images"
+OUTPUT_VAL_MASK_DIR = f"Preprocessed Datasets Prithvi/LoveDa/{TAG}/val/masks"
+OUTPUT_TEST_IMAGE_DIR = f"Preprocessed Datasets Prithvi/LoveDa/{TAG}/test/images"
+OUTPUT_TEST_MASK_DIR = f"Preprocessed Datasets Prithvi/LoveDa/{TAG}/test/masks"
 
 CLASS_MAPPING = {
     "background": 0,

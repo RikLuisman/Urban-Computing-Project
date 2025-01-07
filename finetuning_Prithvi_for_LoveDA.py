@@ -11,15 +11,15 @@ import torch
 import yaml
 from tqdm import tqdm
 from collections import Counter
-from finetuning_helper import TIFFDataset, create_full_model, create_segmentation_head, calculate_class_weights
+from finetuning_Prithvi_helper import TIFFDataset, create_full_model, create_segmentation_head, calculate_class_weights
 
 if __name__ == '__main__':
     ############### Parameters Setting ####################
     TAG = "urban"
-    TRAIN_IMAGES_PATH = f"Preprocessed Datasets/LoveDa/{TAG}/train/images"
-    TRAIN_MASKS_PATH = f"Preprocessed Datasets/LoveDa/{TAG}/train/masks"
-    VAL_IMAGES_PATH = f"Preprocessed Datasets/LoveDa/{TAG}/val/images"
-    VAL_MASKS_PATH = f"Preprocessed Datasets/LoveDa/{TAG}/val/masks"
+    TRAIN_IMAGES_PATH = f"Preprocessed Datasets Prithvi/LoveDa/{TAG}/train/images"
+    TRAIN_MASKS_PATH = f"Preprocessed Datasets Prithvi/LoveDa/{TAG}/train/masks"
+    VAL_IMAGES_PATH = f"Preprocessed Datasets Prithvi/LoveDa/{TAG}/val/images"
+    VAL_MASKS_PATH = f"Preprocessed Datasets Prithvi/LoveDa/{TAG}/val/masks"
     CLASS_DISTRIB_FIX = False
     EPOCHS = 20
     NUM_CLASSES = 7
