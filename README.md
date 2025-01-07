@@ -24,7 +24,7 @@ The pipeline for fine-tuning Prithvi (and UNetFormer) consists of three main com
 ### Directories explanations
 *Disclaimer: The directories used in this project are not included in the repository due to their large size. However, their contents can be replicated, with the exception of those containing the original images.*
 
-1. Two **datasets directories** (the links to download the datasets are provided in our report; however, the datasets can also be made available to the user upon request.)
+1. Two **datasets directories** (the links to download the datasets are provided in our report; however, the datasets can also be made available to the user upon request)
 2. Two directories for the **preprocessed datasets** (one for Prithvi and one for UNetFormer). Each directory contains the preprocessed images and masks, organized into train, validation, and test sets. 
 
 Paths examples:\
